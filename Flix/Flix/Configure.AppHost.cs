@@ -1,18 +1,16 @@
-[assembly: HostingStartup(typeof(Flix.AppHost))]
+using Flix.ServiceInterface;
 
 namespace Flix;
 
-public class AppHost() : AppHostBase("Flix"), IHostingStartup
+public class AppHost : AppHostBase, IHostingStartup
 {
+    public AppHost() : base("Flix", typeof(AppHost).Assembly) {
+        ServiceAssemblies.Add(typeof(StatusQueryHandler).Assembly);
+    }
+
     public void Configure(IWebHostBuilder builder) => builder
-        .ConfigureServices(services => {
+        .ConfigureServices(services =>
+        {
             // Configure ASP.NET Core IOC Dependencies
         });
-
-    public override void Configure()
-    {
-        // Configure ServiceStack, Run custom logic after ASP.NET Core Startup
-        SetConfig(new HostConfig {
-        });
-    }
 }
