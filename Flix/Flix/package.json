@@ -1,0 +1,6 @@
+{
+    "scripts": {
+        "dtos": "x mjs",
+        "dev": "dotnet watch"
+    }
+}
