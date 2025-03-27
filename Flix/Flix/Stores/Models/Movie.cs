@@ -1,3 +1,4 @@
+using Flix.Stores.ProviderMappings;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -7,7 +8,7 @@ namespace Flix.Stores.Models
 	{
 		[BsonId]
 		[BsonRepresentation(BsonType.ObjectId)]
-		public required int Id { get; set; }
+		public int Id { get; set; }
 
 		[BsonElement("title")]
 		public required string Title { get; set; }
@@ -22,7 +23,7 @@ namespace Flix.Stores.Models
 		public string Genre { get; set; }
 
 		[BsonElement("runTime")]
-		public int RunTime { get; set; }
+		public int? RunTime { get; set; }
 
 		[BsonElement("coverImage")]
 		public string CoverImage { get; set; }
@@ -35,5 +36,8 @@ namespace Flix.Stores.Models
 
 		[BsonElement("actors")]
 		public List<string> Actors { get; set; }
+
+		[BsonElement("providerIds")]
+		public Dictionary<Provider, string> ProviderIds { get; set; }
 	}
 }

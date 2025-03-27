@@ -1,12 +1,11 @@
 using Flix.Stores.Models;
 
-namespace Flix.Stores
+namespace Flix.Stores;
+
+public interface IMovieStore
 {
-	public interface IMovieStore
-	{
-		Task<IEnumerable<Movie>> GetAllMoviesAsync();
-		Task<Movie> GetMovieByIdAsync(int id);
-		Task AddMovieAsync(Movie movie);
-		Task UpdateMovieAsync(Movie movie);
-	}
+	Task<IEnumerable<Movie>> GetAllMoviesAsync();
+	Task<Movie> GetMovieByIdAsync(int id);
+	Task AddMovieAsync(Movie movie);
+	Task UpdateMovieAsync(Movie movie);
 }
