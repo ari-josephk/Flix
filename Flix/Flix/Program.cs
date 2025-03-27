@@ -1,7 +1,10 @@
-using Flix.ServiceInterface;
+using Flix.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
+
+services.Configure<FlixDatabaseSettings>(
+    builder.Configuration.GetSection(nameof(FlixDatabaseSettings)));
 
 services.AddFlixServices();
 
