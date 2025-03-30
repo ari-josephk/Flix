@@ -22,7 +22,7 @@ public class TMDBMovieDownloadJob : IJob
 
 	public async Task Execute(IJobExecutionContext context)
 	{
-		var movie = await _downloader.DownloadMovieAsync(context.JobDetail.JobDataMap.GetInt(DownloadJobParameters.EntityId.ToString()));
+		var movie = await _downloader.DownloadAsync(context.JobDetail.JobDataMap.GetString(DownloadJobParameters.EntityId.ToString()));
 
 		if (movie != null && !movie.IsErrorResponse()) 
 		{

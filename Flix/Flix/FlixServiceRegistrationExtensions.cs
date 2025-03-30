@@ -1,4 +1,7 @@
-using Flix.ServiceInterface;
+using Flix.Downloaders;
+using Flix.Downloaders.TMDB;
+using Flix.ServiceInterface.QueryHandlers;
+using Flix.Services;
 using Flix.Stores;
 
 namespace Flix
@@ -8,12 +11,13 @@ namespace Flix
 		public static IServiceCollection AddFlixServices(this IServiceCollection services)
 		{
 			services.AddSingleton<IMovieStore, MovieStore>();
+			services.AddSingleton<SchedulerService>();
 
-			services.Configure<HostConfig>(config =>
-			{
-				config.DefaultRedirectPath = "/metadata";
-			});
+			services.AddLogging();
 
+			// Add Downloaders
+			services.AddTransient<TMDBMovieDownloader>();
+			services.AddTransient<TMDBMovieCatalogDownloader>();
 			return services;
 		}
 	}

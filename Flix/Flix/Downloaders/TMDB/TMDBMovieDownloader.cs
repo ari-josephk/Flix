@@ -10,7 +10,6 @@ namespace Flix.Downloaders.TMDB;
 public class TMDBMovieDownloader : IDownloader<Movie>
 {
 	private static readonly string _apiKeyPath = "TMDB:ApiKey";
-	
 	private readonly TMDbClient _client;
 
 	public TMDBMovieDownloader(IConfiguration config)
@@ -18,30 +17,13 @@ public class TMDBMovieDownloader : IDownloader<Movie>
 		_client = new TMDbClient(config[_apiKeyPath]);
 	}
 
-	public async Task<IEnumerable<Movie>> DownloadMoviesAsync()
+	public async Task<Movie?> DownloadAsync(string? tmdbId)
 	{
-		var outMovies = new List<Movie>();
-		
-		var tmdbResponse = await _client.DiscoverMoviesAsync().OrderBy(TMDbLib.Objects.Discover.DiscoverMovieSortBy.PopularityDesc).Query();
-		
-		foreach (SearchMovie tmdbMovie in tmdbResponse.Results)
+		if (string.IsNullOrEmpty(tmdbId))
 		{
-			var movie = new Movie
-			{
-				Title = tmdbMovie.Title,
-				CoverImage = tmdbMovie.PosterPath,
-				ReleaseYear = tmdbMovie.ReleaseDate?.Year ?? 1948,
-				ProviderIds = new() { { Provider.TMDB, tmdbMovie.Id.ToString() } }
-			};
-			
-			outMovies.Add(movie);
+			return null;
 		}
 
-		return outMovies;
-	}
-
-	public async Task<Movie?> DownloadMovieAsync(int tmdbId)
-	{
 		var tmdbMovie = await _client.GetMovieAsync(tmdbId);
 		
 		return tmdbMovie != null ? new Movie

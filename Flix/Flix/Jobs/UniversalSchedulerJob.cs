@@ -39,15 +39,17 @@ public class UniversalSchedulerJob : IJob
 			.Select(m => m.ProviderIds[Provider.TMDB])
 			.ToList();
 
-		foreach (var tmdbId in tmdbMovieIdsToProcess)
+		for (int i = 0; i < tmdbMovieIdsToProcess.Count; i++)
 		{
+			var tmdbId = tmdbMovieIdsToProcess[i];
+
 			var jobDataMap = new JobDataMap
 			{
 				{ "tmdbId", tmdbId },
 				{ "movieStore", _movieStore }
 			};
 
-			await _schedulerService.ScheduleOneTimeJob<TMDBMovieDownloadJob>(jobDataMap, Delay);
+			await _schedulerService.ScheduleOneTimeJob<TMDBMovieDownloadJob>(jobDataMap, Delay * i);
 		}
 	}
 }

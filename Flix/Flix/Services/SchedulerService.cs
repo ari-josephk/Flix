@@ -3,13 +3,17 @@ namespace Flix.Services;
 using System.Collections;
 using Quartz;
 using Quartz.Impl;
+using ServiceStack.Logging;
 
 public class SchedulerService
 {
 	private readonly IScheduler _scheduler;
+	private readonly ILogger<SchedulerService> _logger;
 
-	public SchedulerService()
+	public SchedulerService(ILogger<SchedulerService> logger)
 	{
+		_logger = logger;
+
 		var schedulerFactory = new StdSchedulerFactory();
 		_scheduler = schedulerFactory.GetScheduler().Result;
 	}
@@ -21,6 +25,8 @@ public class SchedulerService
 
 	public async Task ScheduleJob<TJob>(IDictionary jobDataMap, string cronExpression) where TJob : IJob
 	{
+		_logger.LogInformation($"Scheduling job {typeof(TJob).Name} with cron expression: {cronExpression}");
+		
 		var job = JobBuilder.Create<TJob>()
 			.WithIdentity(typeof(TJob).Name)
 			.UsingJobData(new JobDataMap(jobDataMap))
