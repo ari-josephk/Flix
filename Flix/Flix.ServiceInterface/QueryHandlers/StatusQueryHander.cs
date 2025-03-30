@@ -4,15 +4,15 @@ using Flix.ServiceModel.Queries;
 
 namespace Flix.ServiceInterface
 {
-    public class StatusQueryHandler : Service
-    {
-        public StatusResponse Any(StatusQuery query)
-        {
-            return new StatusResponse
-            {
-                Status = "Service is running",
-                Message = "Free Watermelons for everyone!"
-            };
-        }
-    }
+	public class StatusQueryHandler : Service
+	{
+		public StatusResponse Any(StatusQuery query)
+		{
+			return new StatusResponse
+			{
+				Status = "Service is running",
+				Message = "Free Watermelons for everyone!"
+			};
+		}
+	}
 }

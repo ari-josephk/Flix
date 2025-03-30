@@ -39,5 +39,7 @@ namespace Flix.Stores.Models
 
 		[BsonElement("providerIds")]
 		public Dictionary<Provider, string> ProviderIds { get; set; }
+
+		public bool IsProcessed { get; set; } = false;
 	}
 }
