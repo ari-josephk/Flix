@@ -18,6 +18,7 @@ app.UseHsts();
 
 app.UseServiceStack(new AppHost(), options =>
 {
+    options.MapEndpoints();
 });
 
 app.Run();
