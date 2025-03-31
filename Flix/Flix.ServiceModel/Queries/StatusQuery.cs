@@ -10,5 +10,5 @@ public class StatusQuery : IReturn<StatusResponse>
 public class StatusResponse
 {
     public required string Status { get; set; }
-    public required string Message { get; set; }
+    public string Message { get; set; }
 }

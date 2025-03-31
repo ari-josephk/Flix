@@ -1,5 +1,5 @@
-using Flix.ServiceModel.Models;
 using ServiceStack;
+using Flix.ServiceModel.Models;
 
 namespace Flix.ServiceModel.Queries;
 
@@ -12,3 +12,4 @@ public class MoviesResponse
 {
 	public List<Movie> Movies { get; set; }
 }
+

@@ -3,7 +3,6 @@ using Flix.Jobs.TMDB;
 using Flix.ServiceInterface.QueryHandlers;
 using Flix.Services;
 using Quartz;
-using ServiceStack.Host;
 
 namespace Flix;
 
@@ -11,10 +10,8 @@ public class AppHost : AppHostBase, IHostingStartup
 {
     public AppHost() : base("Flix", typeof(AppHost).Assembly)
     {
-        ServiceAssemblies.Add(typeof(StatusQueryHandler).Assembly);
-        // Configure your AppHost here
-        // Defaults to using the default ServiceStack JSON format
-        SetConfig(new HostConfig { DebugMode = true });
+        //ServiceAssemblies.Add(typeof(StatusQueryHandler).Assembly);
+		ServiceAssemblies.Add(typeof(MoviesQueryHandler).Assembly);
     }
 
     public override void Configure(Funq.Container container)

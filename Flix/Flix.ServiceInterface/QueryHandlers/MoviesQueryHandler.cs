@@ -1,3 +1,4 @@
+
 using ServiceStack;
 using Flix.ServiceModel.Queries;
 using Flix.ServiceModel.Models;
@@ -6,7 +7,7 @@ namespace Flix.ServiceInterface.QueryHandlers;
 
 public class MoviesQueryHandler : Service
 {
-	public static MoviesResponse Get(MoviesQuery query)
+	public MoviesResponse Get(MoviesQuery query)
 	{
 		return new MoviesResponse
 		{
@@ -21,3 +22,4 @@ public class MoviesQueryHandler : Service
 		};
 	}
 }
+
