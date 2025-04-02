@@ -1,4 +1,4 @@
-namespace Flix.JobData;
+namespace Flix.ServiceInterface.JobData;
 
 public enum DownloadJobParameters
 {

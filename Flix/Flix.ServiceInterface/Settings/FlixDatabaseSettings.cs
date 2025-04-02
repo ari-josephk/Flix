@@ -1,4 +1,4 @@
-namespace Flix.Settings;
+namespace Flix.ServiceInterface.Settings;
 
 public class FlixDatabaseSettings
 {

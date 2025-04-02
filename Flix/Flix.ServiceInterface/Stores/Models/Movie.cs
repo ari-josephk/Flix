@@ -1,8 +1,9 @@
-using Flix.Stores.ProviderMappings;
+
+using Flix.ServiceInterface.Stores.ProviderMappings;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace Flix.Stores.Models
+namespace Flix.ServiceInterface.Stores.Models
 {
 	public class Movie
 	{

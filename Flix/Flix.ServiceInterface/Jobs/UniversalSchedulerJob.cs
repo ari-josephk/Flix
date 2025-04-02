@@ -1,30 +1,20 @@
-using System;
-using System.Threading.Tasks;
-using Flix.Jobs.TMDB;
-using Flix.Services;
-using Flix.Stores;
-using Flix.Stores.Models;
-using Flix.Stores.ProviderMappings;
-using Microsoft.Extensions.DependencyInjection;
+
+using Flix.ServiceInterface.Jobs.TMDB;
+using Flix.ServiceInterface.Services;
+using Flix.ServiceInterface.Stores;
+using Flix.ServiceInterface.Stores.ProviderMappings;
 using Microsoft.Extensions.Logging;
 using Quartz;
 
-namespace Flix.Jobs;
+namespace Flix.ServiceInterface.Jobs;
 
-public class UniversalSchedulerJob : IJob
+public class UniversalSchedulerJob(SchedulerService schedulerService, ILogger<UniversalSchedulerJob> logger, IMovieStore movieStore) : IJob
 {
-	private readonly ILogger<UniversalSchedulerJob> _logger;
-	private readonly SchedulerService _schedulerService;
-	private readonly IMovieStore _movieStore;
+	private readonly ILogger<UniversalSchedulerJob> _logger = logger;
+	private readonly SchedulerService _schedulerService = schedulerService;
+	private readonly IMovieStore _movieStore = movieStore;
 
 	private static readonly TimeSpan Delay = TimeSpan.FromSeconds(5);
-
-	public UniversalSchedulerJob(SchedulerService schedulerService, ILogger<UniversalSchedulerJob> logger, IMovieStore movieStore)
-	{
-		_schedulerService = schedulerService;
-		_logger = logger;
-		_movieStore = movieStore;
-	}
 
 	public async Task Execute(IJobExecutionContext context)
 	{

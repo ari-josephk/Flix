@@ -1,4 +1,4 @@
-using Flix.Settings;
+using Flix.ServiceInterface.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;

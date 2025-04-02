@@ -1,4 +1,4 @@
-namespace Flix.Downloaders;
+namespace Flix.ServiceInterface.Downloaders;
 
 public interface IDownloader<T>
 {

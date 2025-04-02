@@ -1,19 +1,16 @@
-using Flix.Stores.Models;
-using Flix.Stores.ProviderMappings;
+using Flix.ServiceInterface.Stores.Models;
+using Flix.ServiceInterface.Stores.ProviderMappings;
+using Microsoft.Extensions.Configuration;
 using TMDbLib.Client;
 using TMDbLib.Objects.Search;
 
-namespace Flix.Downloaders.TMDB;
+namespace Flix.ServiceInterface.Downloaders.TMDB;
 
-public class TMDBMovieCatalogDownloader : IDownloader<IEnumerable<Movie>>
+public class TMDBMovieCatalogDownloader(IConfiguration config) : IDownloader<IEnumerable<Movie>>
 {
 	private static readonly string _apiKeyPath = "TMDB:ApiKey";
-	private readonly TMDbClient _client;
+	private readonly TMDbClient _client = new TMDbClient(config[_apiKeyPath]);
 
-	public TMDBMovieCatalogDownloader(IConfiguration config)
-	{
-		_client = new TMDbClient(config[_apiKeyPath]);
-	}
 	public async Task<IEnumerable<Movie>?> DownloadAsync(string? entityId)
 	{
 		var outMovies = new List<Movie>();

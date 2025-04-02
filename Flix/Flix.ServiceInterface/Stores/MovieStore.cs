@@ -1,17 +1,14 @@
-using Flix.Settings;
-using Flix.Stores.Models;
-using Flix.Stores.ProviderMappings;
+using Flix.ServiceInterface.Settings;
+using Flix.ServiceInterface.Stores.Models;
+using Flix.ServiceInterface.Stores.ProviderMappings;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
-namespace Flix.Stores;
 
-public class MovieStore : MongoStore<Movie>, IMovieStore
+namespace Flix.ServiceInterface.Stores;
+
+public class MovieStore(IOptions<FlixDatabaseSettings> dbSettings) : MongoStore<Movie>(dbSettings), IMovieStore
 {
-	public MovieStore(IOptions<FlixDatabaseSettings> dbSettings) : base(dbSettings)
-	{
-	}
-
 	public async Task AddMovieAsync(Movie movie)
 	{
 		await _collection.InsertOneAsync(movie);

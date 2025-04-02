@@ -1,12 +1,10 @@
-using Flix.Downloaders;
-using Flix.Downloaders.TMDB;
-using Flix.JobData;
-using Flix.Stores;
-using Flix.Stores.Models;
-using Flix.Stores.ProviderMappings;
+using Flix.ServiceInterface.Downloaders.TMDB;
+using Flix.ServiceInterface.Stores;
+using Flix.ServiceInterface.Stores.ProviderMappings;
+using Microsoft.Extensions.Logging;
 using Quartz;
 
-namespace Flix.Jobs.TMDB;
+namespace Flix.ServiceInterface.Jobs.TMDB;
 
 public class TMDBMovieCatalogDownloadJob : IJob
 {

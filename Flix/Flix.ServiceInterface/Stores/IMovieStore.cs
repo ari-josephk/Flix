@@ -1,7 +1,9 @@
-using Flix.Stores.Models;
-using Flix.Stores.ProviderMappings;
 
-namespace Flix.Stores;
+
+using Flix.ServiceInterface.Stores.Models;
+using Flix.ServiceInterface.Stores.ProviderMappings;
+
+namespace Flix.ServiceInterface.Stores;
 
 public interface IMovieStore
 {

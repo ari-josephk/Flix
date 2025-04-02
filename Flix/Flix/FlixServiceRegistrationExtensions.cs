@@ -1,8 +1,8 @@
-using Flix.Downloaders;
-using Flix.Downloaders.TMDB;
-using Flix.ServiceInterface.QueryHandlers;
-using Flix.Services;
-using Flix.Stores;
+using Flix.ServiceInterface.Downloaders.TMDB;
+using Flix.ServiceInterface.Services;
+using Flix.ServiceInterface.Stores;
+
+using Quartz;
 
 namespace Flix
 {
@@ -18,6 +18,9 @@ namespace Flix
 			// Add Downloaders
 			services.AddTransient<TMDBMovieDownloader>();
 			services.AddTransient<TMDBMovieCatalogDownloader>();
+
+			services.AddQuartz();
+
 			return services;
 		}
 	}

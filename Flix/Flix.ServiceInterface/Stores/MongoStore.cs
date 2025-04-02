@@ -1,8 +1,8 @@
-using Flix.Settings;
+using Flix.ServiceInterface.Settings;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
-namespace Flix.Stores;
+namespace Flix.ServiceInterface.Stores;
 
 public abstract class MongoStore<T>
 {
