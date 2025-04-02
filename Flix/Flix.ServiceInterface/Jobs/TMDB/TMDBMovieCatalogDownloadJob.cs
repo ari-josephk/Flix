@@ -28,17 +28,7 @@ public class TMDBMovieCatalogDownloadJob : IJob
 		{
 			foreach (var movie in movies)
 			{
-				var existingMovie = await _movieStore.GetMovieByProviderIdAsync(movie.ProviderIds[Provider.TMDB], Provider.TMDB);
-
-				if (existingMovie != null)
-				{
-					await _movieStore.UpdateMovieAsync(movie);
-				}
-				else
-				{
-					// Add new movie
-					await _movieStore.AddMovieAsync(movie);
-				}
+				await _movieStore.UpdateMovieByProviderIdAsync(movie, Provider.TMDB);
 			}
 		}
 		else

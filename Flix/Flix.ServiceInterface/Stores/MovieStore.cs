@@ -2,12 +2,13 @@ using Flix.ServiceInterface.Settings;
 using Flix.ServiceInterface.Stores.Models;
 using Flix.ServiceInterface.Stores.ProviderMappings;
 using Microsoft.Extensions.Options;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 
 namespace Flix.ServiceInterface.Stores;
 
-public class MovieStore(IOptions<FlixDatabaseSettings> dbSettings) : MongoStore<Movie>(dbSettings), IMovieStore
+public class MovieStore(IOptions<FlixDatabaseSettings> dbSettings) : MongoStore<Movie>(dbSettings, "Movies"), IMovieStore
 {
 	public async Task AddMovieAsync(Movie movie)
 	{
@@ -20,7 +21,7 @@ public class MovieStore(IOptions<FlixDatabaseSettings> dbSettings) : MongoStore<
 		return movies;
 	}
 
-	public async Task<Movie> GetMovieByIdAsync(int id)
+	public async Task<Movie> GetMovieByIdAsync(ObjectId id)
 	{
 		return await _collection.Find(m => m.Id == id).FirstOrDefaultAsync();
 	}
@@ -34,6 +35,13 @@ public class MovieStore(IOptions<FlixDatabaseSettings> dbSettings) : MongoStore<
 	public async Task<bool> UpdateMovieAsync(Movie movie)
 	{
 		var filter = Builders<Movie>.Filter.Eq(m => m.Id, movie.Id);
+		var result = await _collection.ReplaceOneAsync(filter, movie, new ReplaceOptions { IsUpsert = false });
+		return result.IsAcknowledged && result.ModifiedCount > 0;
+	}
+
+	public async Task<bool> UpdateMovieByProviderIdAsync(Movie movie, Provider provider)
+	{
+		var filter = Builders<Movie>.Filter.Eq(m => m.ProviderIds[provider], movie.ProviderIds[provider]);
 		var result = await _collection.ReplaceOneAsync(filter, movie, new ReplaceOptions { IsUpsert = false });
 		return result.IsAcknowledged && result.ModifiedCount > 0;
 	}

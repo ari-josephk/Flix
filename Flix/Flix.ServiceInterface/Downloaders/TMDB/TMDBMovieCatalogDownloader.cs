@@ -9,7 +9,7 @@ namespace Flix.ServiceInterface.Downloaders.TMDB;
 public class TMDBMovieCatalogDownloader(IConfiguration config) : IDownloader<IEnumerable<Movie>>
 {
 	private static readonly string _apiKeyPath = "TMDB:ApiKey";
-	private readonly TMDbClient _client = new TMDbClient(config[_apiKeyPath]);
+	private readonly TMDbClient _client = new(config[_apiKeyPath]);
 
 	public async Task<IEnumerable<Movie>?> DownloadAsync(string? entityId)
 	{

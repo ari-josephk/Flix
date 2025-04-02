@@ -9,7 +9,7 @@ namespace Flix.ServiceInterface.Stores.Models
 	{
 		[BsonId]
 		[BsonRepresentation(BsonType.ObjectId)]
-		public int Id { get; set; }
+		public ObjectId Id { get; set; } = ObjectId.GenerateNewId();
 
 		[BsonElement("title")]
 		public required string Title { get; set; }
