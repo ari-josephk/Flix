@@ -9,10 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Moq" Version="4.20.72" />
     <ProjectReference Include="..\Flix.ServiceInterface\Flix.ServiceInterface.csproj" />
     <ProjectReference Include="..\Flix.ServiceModel\Flix.ServiceModel.csproj" />
 
-    <PackageReference Include="NUnit" Version="3.13.*" />
+    <PackageReference Include="NUnit" Version="2.5.7.10213" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.1.*" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.*" />
     <PackageReference Include="ServiceStack" Version="8.*" />

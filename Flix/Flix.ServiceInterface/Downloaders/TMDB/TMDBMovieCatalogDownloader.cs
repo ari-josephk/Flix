@@ -10,6 +10,12 @@ public class TMDBMovieCatalogDownloader(IConfiguration config) : IDownloader<IEn
 {
 	private static readonly string _apiKeyPath = "TMDB:ApiKey";
 	private readonly TMDbClient _client = new(config[_apiKeyPath]);
+	
+	//Testing constructor
+	public TMDBMovieCatalogDownloader(TMDbClient client) : this(new ConfigurationBuilder().Build())
+	{
+		_client = client;
+	}
 
 	public async Task<IEnumerable<Movie>?> DownloadAsync(string? entityId)
 	{
