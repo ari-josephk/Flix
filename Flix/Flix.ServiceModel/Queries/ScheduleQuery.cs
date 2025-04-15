@@ -1,3 +1,4 @@
+using Flix.ServiceModel.Models;
 using ServiceStack;
 
 namespace Flix.ServiceModel.Queries;
@@ -9,5 +10,5 @@ public class ScheduleQuery : IReturn<StatusResponse>
 
 public class ScheduleResponse
 {
-    public required IEnumerable<(string, DateTimeOffset?, DateTimeOffset?)> Jobs { get; set; }
+    public required IEnumerable<ScheduleJob> Jobs { get; set; }
 }

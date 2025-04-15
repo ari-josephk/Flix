@@ -1,15 +1,16 @@
+using Flix.ServiceInterface.Downloaders.TMDB.Settings;
 using Flix.ServiceInterface.Stores.Models;
 using Flix.ServiceInterface.Stores.ProviderMappings;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using ServiceStack;
 using TMDbLib.Client;
 
 namespace Flix.ServiceInterface.Downloaders.TMDB;
 
-public class TMDBMovieDownloader(IConfiguration config) : IDownloader<Movie>
+public class TMDBMovieDownloader(IConfiguration config, IOptions<TMDBDownloaderSettings> options) : IDownloader<Movie>
 {
-	private static readonly string _apiKeyPath = "TMDB:ApiKey";
-	private readonly TMDbClient _client = new TMDbClient(config[_apiKeyPath]);
+	private readonly TMDbClient _client = new(config[options.Value.ApiKeyPath]);
 
 	public async Task<Movie?> DownloadAsync(string? tmdbId)
 	{
@@ -24,13 +25,14 @@ public class TMDBMovieDownloader(IConfiguration config) : IDownloader<Movie>
 		{
 			Title = tmdbMovie.Title,
 			CoverImage = tmdbMovie.PosterPath,
-			Director = tmdbMovie.Credits.Crew.FirstOrDefault(c => c.Job == "Director")?.Name ?? "Unknown",
+			Director = tmdbMovie.Credits?.Crew.FirstOrDefault(c => c.Job == "Director")?.Name ?? "Unknown",
 			Genre = tmdbMovie.Genres.Join(", "),
 			RunTime = tmdbMovie.Runtime,
 			ReleaseYear = tmdbMovie.ReleaseDate?.Year ?? 1948,
 			ProviderIds = new() { { Provider.TMDB, tmdbId.ToString() } },
-			Media = tmdbMovie.Images.Posters.Select(p=> p.FilePath).ToList(),
-			Actors = tmdbMovie.Credits.Cast.Select(c => c.Name).ToList(),
+			Media = tmdbMovie.Images?.Posters.Select(p=> p.FilePath).ToList() ?? [],
+			Actors = tmdbMovie.Credits?.Cast.Select(c => c.Name).ToList() ?? [],
+			IsProcessed = true,
 		} : null;
 	}
 }

@@ -1,12 +1,11 @@
+using Flix.ServiceInterface.Downloaders.TMDB.Settings;
 using Flix.ServiceInterface.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 
-services.Configure<FlixDatabaseSettings>(
-    builder.Configuration.GetSection(nameof(FlixDatabaseSettings)));
-
 services.AddFlixServices();
+services.AddFlixSettings(builder.Configuration);
 
 var app = builder.Build();
 

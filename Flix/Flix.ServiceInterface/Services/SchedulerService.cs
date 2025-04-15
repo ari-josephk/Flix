@@ -1,8 +1,10 @@
 using System.Collections;
+using Flix.ServiceInterface.JobData;
+using Microsoft.EntityFrameworkCore.ValueGeneration;
 using Microsoft.Extensions.Logging;
 using Quartz;
-using Quartz.Impl;
 using Quartz.Impl.Matchers;
+using ServiceStack;
 
 namespace Flix.ServiceInterface.Services;
 
@@ -57,13 +59,16 @@ public class SchedulerService
 	{
 		_logger.LogInformation($"Scheduling job {typeof(TJob).Name} to start at {startTime} and repeat every {repeatInterval}");
 
+		var jobName = jobDataMap.TryGetString(DownloadJobParameters.JobIdentity.ToString(), out var jobIdentity) ? 
+			new List<string> {typeof(TJob).Name, jobIdentity, new Guid().ToString()}.Join("-") : 
+			new List<string> {typeof(TJob).Name, new Guid().ToString()}.Join("-");
+
 		var job = JobBuilder.Create<TJob>()
-			.WithIdentity(typeof(TJob).Name)
 			.UsingJobData(jobDataMap)
+			.WithIdentity(jobName)
 			.Build();
 
 		var triggerBuilder = TriggerBuilder.Create()
-			.WithIdentity($"{typeof(TJob).Name}Trigger")
 			.WithSimpleSchedule(x => x.WithInterval(repeatInterval).RepeatForever());
 
 		if (startTime.HasValue)
@@ -82,13 +87,16 @@ public class SchedulerService
 
 	public async Task ScheduleOneTimeJob<TJob>(JobDataMap jobDataMap, TimeSpan? delay = null) where TJob : IJob
 	{
+		var jobName = jobDataMap.TryGetString(DownloadJobParameters.JobIdentity.ToString(), out var jobIdentity) ? 
+			new List<string> {typeof(TJob).Name, jobIdentity, new Guid().ToString()}.Join("-") : 
+			new List<string> {typeof(TJob).Name, new Guid().ToString()}.Join("-");
+
 		var job = JobBuilder.Create<TJob>()
-			.WithIdentity(typeof(TJob).Name)
 			.UsingJobData(jobDataMap)
+			.WithIdentity(jobName)  
 			.Build();
 
 		var triggerBuilder = TriggerBuilder.Create()
-			.WithIdentity($"{typeof(TJob).Name}OneTimeTrigger")
 			.StartNow();
 
 		if (delay.HasValue)

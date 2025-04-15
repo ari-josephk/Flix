@@ -15,7 +15,7 @@ public abstract class MongoStore<T>
 		// _collection = database.GetCollection<T>(dbSettings.Value.MoviesCollectionName);
 
 		var mongoClientSettings = MongoClientSettings.FromConnectionString("mongodb://localhost:27017");
-		mongoClientSettings.ClusterConfigurator = cb => { /* No-op for in-memory */ };
+		mongoClientSettings.ClusterConfigurator = cb => { /* No-op for in-memory */ };// Use V2 for LINQ support
 		var client = new MongoClient(mongoClientSettings);
 		var database = client.GetDatabase("InMemoryDatabase");
 		_collection = database.GetCollection<T>(collectionName);

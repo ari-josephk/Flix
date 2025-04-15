@@ -2,6 +2,7 @@
 using ServiceStack;
 using Flix.ServiceModel.Queries;
 using Flix.ServiceInterface.Services;
+using Flix.ServiceModel.Models;
 
 namespace Flix.ServiceInterface.QueryHandlers;
 public class ScheduleQueryHandler(SchedulerService scheduler) : Service
@@ -14,7 +15,11 @@ public class ScheduleQueryHandler(SchedulerService scheduler) : Service
 
 		return new ScheduleResponse
 		{
-			Jobs = jobs.Select(job => (job.JobDetail.Key.Name, job.LastRunTime, job.NextRunTime))
+			Jobs = [.. jobs.Select(job => new ScheduleJob {
+				JobName = job.JobDetail.Key.Name,
+				LastRunTime = job.LastRunTime,
+				NextRunTime = job.NextRunTime
+			})]
 		};
 	}
 }

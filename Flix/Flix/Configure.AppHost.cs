@@ -2,6 +2,8 @@ using Flix.ServiceInterface.Jobs;
 using Flix.ServiceInterface.Jobs.TMDB;
 using Flix.ServiceInterface.QueryHandlers;
 using Flix.ServiceInterface.Services;
+using Flix.ServiceInterface.Stores.ProviderMappings;
+using MongoDB.Bson.Serialization.Serializers;
 using Quartz;
 
 namespace Flix;
@@ -17,6 +19,9 @@ public class AppHost : AppHostBase, IHostingStartup
 
     public override void Configure(Funq.Container container)
     {
+        // Mongo Configuration
+        MongoDB.Bson.Serialization.BsonSerializer.RegisterSerializer(new EnumSerializer<Provider>(MongoDB.Bson.BsonType.String));
+
         // Start the scheduler
         var scheduler = container.Resolve<SchedulerService>();
         scheduler.StartAsync().Wait();

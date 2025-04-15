@@ -4,6 +4,7 @@ using Flix.ServiceInterface.Stores.ProviderMappings;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using ServiceStack.Script;
 
 
 namespace Flix.ServiceInterface.Stores;
@@ -41,8 +42,16 @@ public class MovieStore(IOptions<FlixDatabaseSettings> dbSettings) : MongoStore<
 
 	public async Task<bool> UpdateMovieByProviderIdAsync(Movie movie, Provider provider)
 	{
-		var filter = Builders<Movie>.Filter.Eq(m => m.ProviderIds[provider], movie.ProviderIds[provider]);
-		var result = await _collection.ReplaceOneAsync(filter, movie, new ReplaceOptions { IsUpsert = false });
+		var filter = Builders<Movie>.Filter.And(
+			Builders<Movie>.Filter.Exists($"ProviderIds.{provider.AsString()}"),
+			Builders<Movie>.Filter.Eq($"ProviderIds.{provider.AsString()}", movie.ProviderIds[provider])
+		);
+		var existingMovie = await _collection.Find(filter).FirstOrDefaultAsync();
+		if (existingMovie != null)
+		{
+			movie.Id = existingMovie.Id;
+		}
+		var result = await _collection.ReplaceOneAsync(filter, movie, new ReplaceOptions { IsUpsert = true });
 		return result.IsAcknowledged && result.ModifiedCount > 0;
 	}
 }

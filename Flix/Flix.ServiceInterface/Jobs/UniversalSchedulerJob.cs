@@ -1,4 +1,5 @@
 
+using Flix.ServiceInterface.JobData;
 using Flix.ServiceInterface.Jobs.TMDB;
 using Flix.ServiceInterface.Services;
 using Flix.ServiceInterface.Stores;
@@ -29,14 +30,20 @@ public class UniversalSchedulerJob(SchedulerService schedulerService, ILogger<Un
 			.Select(m => m.ProviderIds[Provider.TMDB])
 			.ToList();
 
+		var movieNames = moviesToProcess
+			.Where(m => m.ProviderIds.ContainsKey(Provider.TMDB) && m.ProviderIds[Provider.TMDB] != null && m.IsProcessed == false)
+			.Select(m => m.Title)
+			.ToList();
+
 		for (int i = 0; i < tmdbMovieIdsToProcess.Count; i++)
 		{
 			var tmdbId = tmdbMovieIdsToProcess[i];
+			var movieName = movieNames[i];
 
 			var jobDataMap = new JobDataMap
 			{
-				{ "tmdbId", tmdbId },
-				{ "movieStore", _movieStore }
+				{ DownloadJobParameters.EntityId.ToString(), tmdbId },
+				{ DownloadJobParameters.JobIdentity.ToString(), movieName }
 			};
 
 			await _schedulerService.ScheduleOneTimeJob<TMDBMovieDownloadJob>(jobDataMap, Delay * i);

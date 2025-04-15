@@ -1,5 +1,7 @@
 using Flix.ServiceInterface.Downloaders.TMDB;
+using Flix.ServiceInterface.Downloaders.TMDB.Settings;
 using Flix.ServiceInterface.Services;
+using Flix.ServiceInterface.Settings;
 using Flix.ServiceInterface.Stores;
 
 using Quartz;
@@ -20,6 +22,17 @@ namespace Flix
 			services.AddTransient<TMDBMovieCatalogDownloader>();
 
 			services.AddQuartz();
+
+			return services;
+		}
+
+		public static IServiceCollection AddFlixSettings(this IServiceCollection services, IConfiguration configuration)
+		{
+			services.Configure<FlixDatabaseSettings>(
+				configuration.GetSection(nameof(FlixDatabaseSettings)));
+
+			services.Configure<TMDBDownloaderSettings>(
+				configuration.GetSection(TMDBDownloaderSettings.OptionsName));
 
 			return services;
 		}
