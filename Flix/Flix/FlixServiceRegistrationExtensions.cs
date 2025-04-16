@@ -1,5 +1,10 @@
-using Flix.ServiceInterface;
-using Flix.Stores;
+using Flix.ServiceInterface.Downloaders.TMDB;
+using Flix.ServiceInterface.Downloaders.TMDB.Settings;
+using Flix.ServiceInterface.Services;
+using Flix.ServiceInterface.Settings;
+using Flix.ServiceInterface.Stores;
+
+using Quartz;
 
 namespace Flix
 {
@@ -8,11 +13,26 @@ namespace Flix
 		public static IServiceCollection AddFlixServices(this IServiceCollection services)
 		{
 			services.AddSingleton<IMovieStore, MovieStore>();
+			services.AddSingleton<ISchedulerService, SchedulerService>();
 
-			services.Configure<HostConfig>(config =>
-			{
-				config.DefaultRedirectPath = "/metadata";
-			});
+			services.AddLogging();
+
+			// Add Downloaders
+			services.AddTransient<TMDBMovieDownloader>();
+			services.AddTransient<TMDBMovieCatalogDownloader>();
+
+			services.AddQuartz();
+
+			return services;
+		}
+
+		public static IServiceCollection AddFlixSettings(this IServiceCollection services, IConfiguration configuration)
+		{
+			services.Configure<FlixDatabaseSettings>(
+				configuration.GetSection(nameof(FlixDatabaseSettings)));
+
+			services.Configure<TMDBDownloaderSettings>(
+				configuration.GetSection(TMDBDownloaderSettings.OptionsName));
 
 			return services;
 		}
