@@ -8,20 +8,27 @@ using TMDbLib.Objects.Search;
 
 namespace Flix.ServiceInterface.Downloaders.TMDB;
 
-public class TMDBMovieCatalogDownloader(IConfiguration config, IOptions<TMDBDownloaderSettings> options) : IDownloader<IEnumerable<Movie>>
+public class TMDBMovieCatalogDownloader : IDownloader<IEnumerable<Movie>>
 {
-	private readonly TMDbClient _client = new(config[options.Value.ApiKeyPath]);
-	private readonly long _delay = options.Value.DownloadDelayMilliseconds;
-	private readonly int _maxPagesToDownload = options.Value.MaxPagesToDownload;
+	private readonly TMDbClient _client;
+	private readonly long _delay;
+	private readonly int _maxPagesToDownload;
+
+	public TMDBMovieCatalogDownloader(IConfiguration config, IOptions<TMDBDownloaderSettings> options)
+	{
+		_client = new TMDbClient(config[options.Value.ApiKeyPath]);
+		_delay = options.Value.DownloadDelayMilliseconds;
+		_maxPagesToDownload = options.Value.MaxPagesToDownload;
+	}
 
 	//Testing constructor
-	public TMDBMovieCatalogDownloader(TMDbClient client) : this(null!, null!)
+	public TMDBMovieCatalogDownloader(TMDbClient client)
 	{
 		_client = client;
 		_delay = 1000;
 	}
 
-	public async Task<IEnumerable<Movie>?> DownloadAsync(string? entityId)
+	public virtual async Task<IEnumerable<Movie>?> DownloadAsync(string? entityId)
 	{
 		await Task.Delay(TimeSpan.FromMilliseconds(_delay));
 

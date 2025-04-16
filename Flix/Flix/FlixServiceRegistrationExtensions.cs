@@ -13,7 +13,7 @@ namespace Flix
 		public static IServiceCollection AddFlixServices(this IServiceCollection services)
 		{
 			services.AddSingleton<IMovieStore, MovieStore>();
-			services.AddSingleton<SchedulerService>();
+			services.AddSingleton<ISchedulerService, SchedulerService>();
 
 			services.AddLogging();
 

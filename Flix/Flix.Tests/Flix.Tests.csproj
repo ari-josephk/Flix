@@ -13,9 +13,10 @@
     <ProjectReference Include="..\Flix.ServiceInterface\Flix.ServiceInterface.csproj" />
     <ProjectReference Include="..\Flix.ServiceModel\Flix.ServiceModel.csproj" />
 
-    <PackageReference Include="NUnit" Version="2.5.7.10213" />
+    <PackageReference Include="NUnit" Version="3.14.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.1.*" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.*" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
+    <PackageReference Include="NUnit.Analyzers" Version="4.7.0" />
     <PackageReference Include="ServiceStack" Version="8.*" />
     <PackageReference Include="ServiceStack.Kestrel" Version="8.*" />
   </ItemGroup>

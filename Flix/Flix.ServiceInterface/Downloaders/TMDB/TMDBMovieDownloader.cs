@@ -8,11 +8,22 @@ using TMDbLib.Client;
 
 namespace Flix.ServiceInterface.Downloaders.TMDB;
 
-public class TMDBMovieDownloader(IConfiguration config, IOptions<TMDBDownloaderSettings> options) : IDownloader<Movie>
+public class TMDBMovieDownloader: IDownloader<Movie>
 {
-	private readonly TMDbClient _client = new(config[options.Value.ApiKeyPath]);
+	private readonly TMDbClient _client;
 
-	public async Task<Movie?> DownloadAsync(string? tmdbId)
+	public TMDBMovieDownloader(IConfiguration config, IOptions<TMDBDownloaderSettings> options)
+	{
+		_client = new TMDbClient(config[options.Value.ApiKeyPath]);
+	}
+
+	//Testing constructor
+	public TMDBMovieDownloader(TMDbClient client)
+	{
+		_client = client;
+	}
+
+	public virtual async Task<Movie?> DownloadAsync(string? tmdbId)
 	{
 		if (string.IsNullOrEmpty(tmdbId))
 		{

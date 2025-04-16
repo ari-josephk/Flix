@@ -10,9 +10,9 @@ public class TMDBMovieCatalogDownloadJob : IJob
 {
 	private readonly IMovieStore _movieStore;
 	private readonly TMDBMovieCatalogDownloader _downloader;
-	private readonly ILogger<TMDBMovieDownloadJob> _logger;
+	private readonly ILogger<TMDBMovieCatalogDownloadJob> _logger;
 
-	public TMDBMovieCatalogDownloadJob(IMovieStore movieStore, TMDBMovieCatalogDownloader downloader, ILogger<TMDBMovieDownloadJob> logger)
+	public TMDBMovieCatalogDownloadJob(IMovieStore movieStore, TMDBMovieCatalogDownloader downloader, ILogger<TMDBMovieCatalogDownloadJob> logger)
 	{
 		_movieStore = movieStore;
 		_downloader = downloader;
@@ -21,19 +21,27 @@ public class TMDBMovieCatalogDownloadJob : IJob
 
 	public async Task Execute(IJobExecutionContext context)
 	{
-		_logger.LogInformation("TMDB Movie Catalog Download Job started.");
-		var movies = await _downloader.DownloadAsync(null);
-
-		if (movies != null && movies.Any())
+		try
 		{
-			foreach (var movie in movies)
+			_logger.LogInformation("TMDB Movie Catalog Download Job started.");
+			var movies = await _downloader.DownloadAsync(null);
+
+			if (movies != null && movies.Any())
 			{
-				await _movieStore.UpdateMovieByProviderIdAsync(movie, Provider.TMDB);
+				foreach (var movie in movies)
+				{
+					await _movieStore.UpdateMovieByProviderIdAsync(movie, Provider.TMDB);
+				}
+			}
+			else
+			{
+				throw new Exception("No movies found or error response from TMDB.");
 			}
 		}
-		else
+		catch (Exception ex)
 		{
-			throw new Exception("No movies found or error response from TMDB.");
+			_logger.LogError(ex, "Error downloading movie catalog from TMDB: {Message}", ex.Message);
+			throw new Exception("Error downloading movie catalog from TMDB.", ex);
 		}
 	}
 }

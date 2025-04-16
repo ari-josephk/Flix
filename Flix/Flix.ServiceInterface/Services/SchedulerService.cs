@@ -8,7 +8,7 @@ using ServiceStack;
 
 namespace Flix.ServiceInterface.Services;
 
-public class SchedulerService
+public class SchedulerService : ISchedulerService
 {
 	private readonly IScheduler _scheduler;
 	private readonly ILogger<SchedulerService> _logger;

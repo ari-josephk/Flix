@@ -9,10 +9,10 @@ using Quartz;
 
 namespace Flix.ServiceInterface.Jobs;
 
-public class UniversalSchedulerJob(SchedulerService schedulerService, ILogger<UniversalSchedulerJob> logger, IMovieStore movieStore) : IJob
+public class UniversalSchedulerJob(ISchedulerService schedulerService, ILogger<UniversalSchedulerJob> logger, IMovieStore movieStore) : IJob
 {
 	private readonly ILogger<UniversalSchedulerJob> _logger = logger;
-	private readonly SchedulerService _schedulerService = schedulerService;
+	private readonly ISchedulerService _schedulerService = schedulerService;
 	private readonly IMovieStore _movieStore = movieStore;
 
 	private static readonly TimeSpan Delay = TimeSpan.FromSeconds(5);

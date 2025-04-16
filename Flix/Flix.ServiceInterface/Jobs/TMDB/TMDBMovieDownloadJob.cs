@@ -1,6 +1,7 @@
 using Flix.ServiceInterface.Downloaders.TMDB;
 using Flix.ServiceInterface.JobData;
 using Flix.ServiceInterface.Stores;
+using Flix.ServiceInterface.Stores.ProviderMappings;
 using Microsoft.Extensions.Logging;
 using Quartz;
 
@@ -14,17 +15,25 @@ public class TMDBMovieDownloadJob(IMovieStore movieStore, TMDBMovieDownloader do
 
 	public async Task Execute(IJobExecutionContext context)
 	{
-		var movie = await _downloader.DownloadAsync(context.JobDetail.JobDataMap.GetString(DownloadJobParameters.EntityId.ToString()));
-
-		if (movie != null) 
+		try
 		{
-			if (!movie.IsProcessed) _logger.LogWarning("Movie {Title} is not processed fully after download.", movie.Title);
+			var movie = await _downloader.DownloadAsync(context.JobDetail.JobDataMap.GetString(DownloadJobParameters.EntityId.ToString()));
 
-			await _movieStore.UpdateMovieAsync(movie);
+			if (movie != null)
+			{
+				if (!movie.IsProcessed) _logger.LogWarning("Movie {Title} is not processed fully after download.", movie.Title);
+
+				await _movieStore.UpdateMovieByProviderIdAsync(movie, Provider.TMDB);
+			}
+			else
+			{
+				throw new Exception("Movie not found or error response from TMDB.");
+			}
 		}
-		else
+		catch (Exception ex)
 		{
-			throw new Exception("Movie not found or error response from TMDB.");
-		} 
+			_logger.LogError(ex, "Error downloading movie from TMDB: {Message}", ex.Message);
+			throw new Exception("Error downloading movie from TMDB.", ex);
+		}
 	}
 }

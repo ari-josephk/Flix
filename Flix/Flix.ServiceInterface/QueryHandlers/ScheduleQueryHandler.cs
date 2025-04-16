@@ -5,9 +5,9 @@ using Flix.ServiceInterface.Services;
 using Flix.ServiceModel.Models;
 
 namespace Flix.ServiceInterface.QueryHandlers;
-public class ScheduleQueryHandler(SchedulerService scheduler) : Service
+public class ScheduleQueryHandler(ISchedulerService scheduler) : Service
 {
-	private readonly SchedulerService _scheduler = scheduler;
+	private readonly ISchedulerService _scheduler = scheduler;
 
 	public async Task<ScheduleResponse> Get(ScheduleQuery query)
 	{
