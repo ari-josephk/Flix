@@ -37,7 +37,7 @@ public class TMDBMovieDownloader: IDownloader<Movie>
 			Title = tmdbMovie.Title,
 			CoverImage = tmdbMovie.PosterPath,
 			Director = tmdbMovie.Credits?.Crew.FirstOrDefault(c => c.Job == "Director")?.Name ?? "Unknown",
-			Genre = tmdbMovie.Genres.Join(", "),
+			Genre = tmdbMovie.Genres.Select(g => g.Name).Join(", "),
 			RunTime = tmdbMovie.Runtime,
 			ReleaseYear = tmdbMovie.ReleaseDate?.Year ?? 1948,
 			ProviderIds = new() { { Provider.TMDB, tmdbId.ToString() } },

@@ -23,7 +23,7 @@ public class AppHost : AppHostBase, IHostingStartup
         MongoDB.Bson.Serialization.BsonSerializer.RegisterSerializer(new EnumSerializer<Provider>(MongoDB.Bson.BsonType.String));
 
         // Start the scheduler
-        var scheduler = container.Resolve<SchedulerService>();
+        var scheduler = container.Resolve<ISchedulerService>();
         scheduler.StartAsync().Wait();
         Console.WriteLine("Scheduler started.");
         // Schedule permanent jobs

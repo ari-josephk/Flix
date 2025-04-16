@@ -61,7 +61,7 @@ public class SchedulerService : ISchedulerService
 
 		var jobName = jobDataMap.TryGetString(DownloadJobParameters.JobIdentity.ToString(), out var jobIdentity) ? 
 			new List<string> {typeof(TJob).Name, jobIdentity, new Guid().ToString()}.Join("-") : 
-			new List<string> {typeof(TJob).Name, new Guid().ToString()}.Join("-");
+			new List<string> {typeof(TJob).Name, Guid.NewGuid().ToString()}.Join("-");
 
 		var job = JobBuilder.Create<TJob>()
 			.UsingJobData(jobDataMap)
@@ -88,8 +88,8 @@ public class SchedulerService : ISchedulerService
 	public async Task ScheduleOneTimeJob<TJob>(JobDataMap jobDataMap, TimeSpan? delay = null) where TJob : IJob
 	{
 		var jobName = jobDataMap.TryGetString(DownloadJobParameters.JobIdentity.ToString(), out var jobIdentity) ? 
-			new List<string> {typeof(TJob).Name, jobIdentity, new Guid().ToString()}.Join("-") : 
-			new List<string> {typeof(TJob).Name, new Guid().ToString()}.Join("-");
+			new List<string> {typeof(TJob).Name, jobIdentity, Guid.NewGuid().ToString()}.Join("-") : 
+			new List<string> {typeof(TJob).Name, Guid.NewGuid().ToString()}.Join("-");
 
 		var job = JobBuilder.Create<TJob>()
 			.UsingJobData(jobDataMap)
