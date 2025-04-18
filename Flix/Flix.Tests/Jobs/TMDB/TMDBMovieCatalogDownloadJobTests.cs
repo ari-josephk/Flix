@@ -56,7 +56,7 @@ public class TMDBMovieCatalogDownloadJobTests
 
 		// Act & Assert
 		var ex = Assert.Throws<Exception>(() => _job.Execute(null).GetAwaiter().GetResult());
-		Assert.That(ex.Message, Is.EqualTo("No movies found or error response from TMDB."));
+		Assert.That(ex.Message, Is.EqualTo("Error downloading movie catalog from TMDB."));
 	}
 	
 	[Test]
