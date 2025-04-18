@@ -30,7 +30,7 @@ namespace Flix.ServiceInterface.Stores.Models
 		public string CoverImage { get; set; }
 
 		[BsonElement("trailer")]
-		public string Trailer { get; set; }
+		public string? Trailer { get; set; }
 
 		[BsonElement("media")]
 		public List<string> Media { get; set; }

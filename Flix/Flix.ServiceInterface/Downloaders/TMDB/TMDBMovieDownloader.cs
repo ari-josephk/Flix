@@ -30,7 +30,15 @@ public class TMDBMovieDownloader: IDownloader<Movie>
 			return null;
 		}
 
-		var tmdbMovie = await _client.GetMovieAsync(tmdbId);
+		if (!int.TryParse(tmdbId, out int tmdbIdInt))
+		{
+			throw new ArgumentException($"Invalid TMDB ID: {tmdbId}");
+		}
+
+		var tmdbMovie = await _client.GetMovieAsync(tmdbIdInt);
+		tmdbMovie.Credits = await _client.GetMovieCreditsAsync(tmdbIdInt);
+		tmdbMovie.Images = await _client.GetMovieImagesAsync(tmdbIdInt);
+		tmdbMovie.Videos = await _client.GetMovieVideosAsync(tmdbIdInt);
 		
 		return tmdbMovie != null ? new Movie
 		{
@@ -43,6 +51,7 @@ public class TMDBMovieDownloader: IDownloader<Movie>
 			ProviderIds = new() { { Provider.TMDB, tmdbId.ToString() } },
 			Media = tmdbMovie.Images?.Posters.Select(p=> p.FilePath).ToList() ?? [],
 			Actors = tmdbMovie.Credits?.Cast.Select(c => c.Name).ToList() ?? [],
+			Trailer = tmdbMovie.Videos?.Results.FirstOrDefault(v => v.Site == "YouTube" && v.Type == "Trailer")?.Key,
 			IsProcessed = true,
 		} : null;
 	}
