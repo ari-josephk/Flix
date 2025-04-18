@@ -10,14 +10,9 @@ public abstract class MongoStore<T>
 
 	public MongoStore(IOptions<FlixDatabaseSettings> dbSettings, string collectionName)
 	{
-		// var client = new MongoClient(dbSettings.Value.ConnectionString);
-		// var database = client.GetDatabase(dbSettings.Value.DatabaseName);
-		// _collection = database.GetCollection<T>(dbSettings.Value.MoviesCollectionName);
+		var client = new MongoClient(dbSettings.Value.ConnectionString);
+		var database = client.GetDatabase(dbSettings.Value.DatabaseName);
 
-		var mongoClientSettings = MongoClientSettings.FromConnectionString("mongodb://localhost:27017");
-		mongoClientSettings.ClusterConfigurator = cb => { /* No-op for in-memory */ };// Use V2 for LINQ support
-		var client = new MongoClient(mongoClientSettings);
-		var database = client.GetDatabase("InMemoryDatabase");
 		_collection = database.GetCollection<T>(collectionName);
 	}
 }
